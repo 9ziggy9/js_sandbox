@@ -19,3 +19,7 @@ const myGame = parseCSV(response);
 
 replayGame(myGame);
 
+// Not implemented here is a procedure to pack an array of moves constructed in
+// frontend memory into a csv string suitable to be saved in the DB. I leave that
+// to you. :)
+
