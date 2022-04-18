@@ -15,7 +15,7 @@ class Engine {
   initState() {
     const newArray = Array.from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
     console.log(this.history);
-    this.history.forEach(entry => newArray[entry[0]][entry[1]] = 1);
+    this.history.forEach(entry => newArray[entry[1]][entry[0]] = 1);
     this.#STATE = newArray;
     console.log(newArray);
     return this.#STATE;
