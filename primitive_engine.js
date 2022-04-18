@@ -6,16 +6,24 @@ class Engine {
   // strictly necessary. If we want OOP, we should do it right.
   #STATE;
   #DIMS;
-  constructor(history = undefined) {
+  constructor(history = []) {
     this.history = history;
     this.#STATE = undefined;
     this.#DIMS = 15;
   }
 
-  initState(history = []) {
-    const sArray = Array.from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
-    this.#STATE = sArray;
+  initState() {
+    const newArray = Array.from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
+    console.log(this.history);
+    this.history.forEach(entry => newArray[entry[0]][entry[1]] = 1);
+    this.#STATE = newArray;
+    console.log(newArray);
     return this.#STATE;
+  }
+
+  // Just for my sanity, not necessary
+  printState() {
+    this.#STATE.forEach(row => console.log(`${row}`));
   }
 }
 
@@ -37,4 +45,5 @@ const myCSV = "0909,1010,1009,0910,0809,\
 gameHistory = parseCSV(myCSV);
 
 const ourEngine = new Engine(gameHistory);
-ourEngine.constructStateFromHistory();
+ourEngine.initState();
+ourEngine.printState();
