@@ -13,9 +13,10 @@ class Engine {
   #STATE;
   #DIMS;
   #VECS;
-  constructor(pieces, history = []) {
+  constructor(pieces, strength="naive", history = []) {
     this.pieces = pieces;
     this.history = history;
+    this.strength = strength;
     this.#DIMS = 15;
     this.#STATE = this.#initState();
     // The following set of vectors will indicate all unit movements.
@@ -80,7 +81,12 @@ class Engine {
     return stackCounter; // exit stack
   }
 
-  evalPosition() {
+  // In evaluating the position, we iterate over the entirety of the board and
+  // to each available space, we perform a calculation over all possible rays
+  // which intersect the point; i.e. rays along the unit vectors this.#VECS
+  // Taking the maximum possible value, we assign that to an evaluation matrix
+  // which we will return.
+  naiveEval() {
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
@@ -96,6 +102,36 @@ class Engine {
     }
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
     console.table(evalMatrix, tableColumns);
+    return evalMatrix;
+  }
+
+  #selectBest(arr) {
+    let coords = [-1,-1];
+    let max = 0;
+    for (let y = 0; y < this.#DIMS; y++) {
+      for (let x = 0; x < this.#DIMS; x++) {
+	if (arr[y][x] > max) {
+	  max = arr[y][x];
+	  coords = [x,y];
+	}
+      }
+    }
+    return coords;
+  }
+
+  // Simply return the first best move, primitive but at the moment we are not
+  // calculating possible player moves. This will simply make a "naive" legal
+  // move.
+  move() {
+    let evaluation, choice;
+    switch(this.strength) {
+      default:
+      case "naive": {
+	evaluation = this.naiveEval();
+	break;
+      }
+    }
+    return this.#selectBest(evaluation);
   }
 
   // Just for my sanity, not necessary
@@ -118,6 +154,6 @@ const winningMove = "0512"; // to remember
 gameHistory = parseCSV(myCSV);
 console.log("GAME HISTORY", gameHistory);
 
-const ourEngine = new Engine(0, gameHistory);
+const ourEngine = new Engine(0, "naive", gameHistory);
 ourEngine.printState();
-ourEngine.evalPosition();
+console.log(ourEngine.move());
