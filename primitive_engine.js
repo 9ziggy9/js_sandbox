@@ -32,9 +32,14 @@ class Engine {
     ];
   }
 
+  #init2DArray() {
+    // Simple routine to produce 2D array with all zeroes.
+    // We will use this often, so let's just make an easy method to reference.
+    return Array.from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
+  }
+
   #initState() { // private methods only please.
-    const newArray = Array // initializing 2D array as zeroes quickly.
-	  .from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
+    const newArray = this.#init2DArray();
     // We will indicate locations we have accessed with 1, -1 for opponent,
     // 0 will represent accessible cells. It is times like these that I wish
     // I had enumeration JS. TypeScript would be better here.
@@ -46,8 +51,19 @@ class Engine {
   }
 
   evalPosition() {
-    const newArray = this.#STATE.forEach((row, y) =>
-      row.forEach((col,x) => console.log(`${x}, ${y} `, col)));
+    // You can see how we would do this with a very ugly chaining of higher
+    // order functions, but I think it obscures what is happening, so I will
+    // instead elect to use a normal double for.
+    // --- UNREADABLE ---
+    // const newArray = this.#STATE.forEach((row, y) =>
+    //   row.forEach((col,x) => console.log(`${x}, ${y} `, col)));
+    // --- MORE READABLE ---
+    let evalMatrix = this.#init2DArray();
+    for (let y = 0; y < this.#DIMS; y++) {
+      for (let x = 0; x < this.#DIMS; x++) {
+	evalMatrix[x][y] = this.#computeChainLength(x,y);
+      }
+    }
   }
 
   // Just for my sanity, not necessary
