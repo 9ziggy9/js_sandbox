@@ -67,14 +67,9 @@ class Engine {
   // value is simply the number of stack frames deep we enter before finding a
   // square which is not currently occupied by a CPU piece.
   #computeLengthOnRay(x,y,[dx,dy],stackCounter = 0) {
-    console.log(x,y);
-    console.log(dx,dy);
-    console.log(x+dx, y+dy);
     stackCounter++;
-    console.log(stackCounter);
-    console.log(this.#STATE[y+dy][x+dx] === 1);
     if (stackCounter >= 5) return stackCounter; // this is a winning move.
-    if (this.#STATE[y+dy][x+dx] === 1) // check that neighbor is our piece.
+    if (this.#isBounded(x+dx,y+dy) && this.#STATE[y+dy][x+dx] === 1)
     {
       return this.#computeLengthOnRay(x+dx, y+dy, [dx,dy], stackCounter);
     }
@@ -93,10 +88,9 @@ class Engine {
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	// evalMatrix[x][y] = this.#computeLengthOnRay(x,y,dv);
+	evalMatrix[y][x] = this.#computeLengthOnRay(x,y,dv);
       }
     }
-    evalMatrix[5][12] = this.#computeLengthOnRay(12,5,dv);
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
     console.table(evalMatrix, tableColumns);
   }
