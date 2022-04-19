@@ -125,8 +125,9 @@ class Engine {
   // calculating possible player moves. This will simply make a "naive" legal
   // move.
   move() {
-    let evaluation, choice;
+    let evaluation;
     switch(this.strength) {
+      // more cases in the future, default fallthrough for now.
       default:
       case "naive": {
 	evaluation = this.naiveEval();
