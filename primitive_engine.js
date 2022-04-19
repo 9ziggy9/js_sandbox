@@ -60,19 +60,23 @@ class Engine {
     return true;
   }
 
-  #computeChainLength(x,y) {
-    let optimalLength = 0;
+  #computeChainLength(x,y, stackCounter = 0) {
+    console.log(stackCounter);
+    if (stackCounter >= 5) return stackCounter;
     this.#VECS.forEach(v => {
       const [dx,dy] = v;
-      if (this.#isBounded(x+dx, y+dy) &&
-	  this.#STATE[x][y] === 0 &&
-	  this.#STATE[x+dx][y+dy] === 1)
+      if (this.#isBounded(x+dx, y+dy) && // check that displacement is bounded.
+	  this.#STATE[x][y] === 0 && // check that cell is vacant.
+	  this.#STATE[x+dx][y+dy] === 1) // check that neighbor is our piece.
       {
-	optimalLength++;
+	stackCounter++;
+	x += dx;
+	y += dy;
+	this.#computeChainLength(x, y, stackCounter);
       }
-      return 0;
+      return 0; // We compute side-effects only!
     });
-    return optimalLength;
+    return stackCounter;
   }
 
   evalPosition() {
