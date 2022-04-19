@@ -1,29 +1,59 @@
-// Game engine class; we'll define methods on this and monitor state and run evals;
+// THIS IS ONLY TO PULL IN CSV CONVENIENTLY //
+const fs = require("fs"); // for file i/o
+const buffer = fs.readFileSync("gamehistory.csv"); // reading file into buffer
+const myCSV = buffer.toString();
+
+// Game engine class; we'll define methods on this and monitor state and run
+// evals;
 class Engine {
-  // I'm going to use JSs ugly system of making private namespace,
-  // it is kind of important that only private methods of Engine can
-  // actually alter state. This will enforce such a rule, although not
-  // strictly necessary. If we want OOP, we should do it right.
+  // I'm going to use JSs ugly system of making private namespace, it is kind of
+  // important that only private methods of Engine can actually alter state.
+  // This will enforce such a rule, although not strictly necessary. If we want
+  // OOP, we should do it right.
   #STATE;
   #DIMS;
-  constructor(history = []) {
+  #VECS;
+  constructor(pieces, history = []) {
+    this.pieces = pieces;
     this.history = history;
-    this.#STATE = undefined;
     this.#DIMS = 15;
+    this.#STATE = this.#initState();
+    // The following set of vectors will indicate all unit movements.
+    /*
+      (-1,1)  (0,1)  (1,1)
+
+      (-1,0)  (0,0)  (1,0)
+
+      (-1,-1) (0,-1) (1,-1)
+    */
+    this.#VECS = [
+      [-1,1], [0,1], [1,1], [-1,0],
+      [1,0], [-1,-1], [0,-1], [1,-1]
+    ];
   }
 
-  initState() {
-    const newArray = Array.from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
-    console.log(this.history);
-    this.history.forEach(entry => newArray[entry[1]][entry[0]] = 1);
-    this.#STATE = newArray;
-    console.log(newArray);
-    return this.#STATE;
+  #initState() { // private methods only please.
+    const newArray = Array // initializing 2D array as zeroes quickly.
+	  .from(Array(this.#DIMS), _ => Array(this.#DIMS).fill(0));
+    // We will indicate locations we have accessed with 1, -1 for opponent,
+    // 0 will represent accessible cells. It is times like these that I wish
+    // I had enumeration JS. TypeScript would be better here.
+    this.history.forEach(entry => {
+      const [x,y,pc] = entry;
+      return newArray[x][y] = pc === this.pieces ? 1 : -1;
+    });
+    return newArray;
+  }
+
+  evalPosition() {
+    const newArray = this.#STATE.forEach((row, y) =>
+      row.forEach((col,x) => console.log(`${x}, ${y} `, col)));
   }
 
   // Just for my sanity, not necessary
   printState() {
-    this.#STATE.forEach(row => console.log(`${row}`));
+    const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+    console.table(this.#STATE, tableColumns);
   }
 }
 
@@ -35,15 +65,11 @@ function parseCSV(string) {
     [+coordStr.substring(0,2), +coordStr.substring(2,4), mvNum % 2]);
 }
 
-const myCSV = "0909,1010,1009,0910,0809,\
-		0709,1109,1209,0808,1110,\
-		0810,1210,1310,0807,0811,\
-		0812,1008,1107,0908,0708,\
-		0711,0612,0611,0511,0710,\
-		1007,0512";
+const winningMove = "0512"; // to remember
 
 gameHistory = parseCSV(myCSV);
+console.log("GAME HISTORY", gameHistory);
 
-const ourEngine = new Engine(gameHistory);
-ourEngine.initState();
+const ourEngine = new Engine(0, gameHistory);
 ourEngine.printState();
+ourEngine.evalPosition();
