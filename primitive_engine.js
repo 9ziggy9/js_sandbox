@@ -101,10 +101,12 @@ class Engine {
       }
     }
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+    console.log("CPU evaluation, indicating total length after next move");
     console.table(evalMatrix, tableColumns);
     return evalMatrix;
   }
 
+  // Just to return indices of the maximal 2D array value
   #selectBest(arr) {
     let coords = [-1,-1];
     let max = 0;
@@ -149,11 +151,22 @@ function parseCSV(string) {
     [+coordStr.substring(0,2), +coordStr.substring(2,4), mvNum % 2]);
 }
 
-const winningMove = "0512"; // to remember
-
+// parse CSV
 gameHistory = parseCSV(myCSV);
-console.log("GAME HISTORY", gameHistory);
 
+// init game from position, with engine playing white
+// "naive" indicates strength of the engine, currently we only make naive moves
+// lol, to make better moves we need to calculate to a certain depth of computer
+// AND player moves. But ensuring the computer finds winning moves is the first
+// step.
 const ourEngine = new Engine(0, "naive", gameHistory);
+
+// quick print state of board;
 ourEngine.printState();
-console.log(ourEngine.move());
+
+// calculate next move, destructuring into x and y coordinates.
+const [cpu_x, cpu_y] = ourEngine.move();
+
+// print the move
+console.log(`Found move: (${cpu_x}, ${cpu_y})`);
+
