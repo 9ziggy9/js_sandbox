@@ -81,19 +81,17 @@ class Engine {
   }
 
   evalPosition() {
-    // You can see how we would do this with a very ugly chaining of higher
-    // order functions, but I think it obscures what is happening, so I will
-    // instead elect to use a normal double for.
-    // --- UNREADABLE ---
-    // const newArray = this.#STATE.forEach((row, y) =>
-    //   row.forEach((col,x) => console.log(`${x}, ${y} `, col)));
-    // --- MORE READABLE ---
-    let dv = [-1,1];
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	if (this.#isVacant(x,y))
-	  evalMatrix[y][x] = this.#computeLengthOnRay(x,y,dv);
+	let tmp, optimalLength = 0;
+	if (this.#isVacant(x,y)) {
+	  this.#VECS.forEach(dv => {
+	    tmp = this.#computeLengthOnRay(x,y,dv);
+	    if (tmp > optimalLength) optimalLength = tmp;
+	  });
+	  evalMatrix[y][x] = optimalLength;
+	}
       }
     }
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
