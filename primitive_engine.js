@@ -20,11 +20,11 @@ class Engine {
     this.#STATE = this.#initState();
     // The following set of vectors will indicate all unit movements.
     /*
-      (-1,1)  (0,1)  (1,1)
+      (-1,-1)  (0,-1)  (1,-1)
 
-      (-1,0)  (0,0)  (1,0)
+      (-1,0)   (0,0)   (1,0)
 
-      (-1,-1) (0,-1) (1,-1)
+      (-1,1)   (0,1)   (1,1)
     */
     this.#VECS = [
       [-1,1], [0,1], [1,1], [-1,0],
@@ -60,23 +60,25 @@ class Engine {
     return true;
   }
 
-  #computeChainLength(x,y, stackCounter = 0) {
+  // The following algorithm uses recursion to count the number of pieces which
+  // reside along a ray in a given direction.
+  // x, y coordinates are provided in natural way. We refer to the displacement
+  // vector as dv = [dx,dy], which we will dereference in a clean way. Returned
+  // value is simply the number of stack frames deep we enter before finding a
+  // square which is not currently occupied by a CPU piece.
+  #computeLengthOnRay(x,y,[dx,dy],stackCounter = 0) {
+    console.log(x,y);
+    console.log(dx,dy);
+    console.log(x+dx, y+dy);
+    stackCounter++;
     console.log(stackCounter);
-    if (stackCounter >= 5) return stackCounter;
-    this.#VECS.forEach(v => {
-      const [dx,dy] = v;
-      if (this.#isBounded(x+dx, y+dy) && // check that displacement is bounded.
-	  this.#STATE[x][y] === 0 && // check that cell is vacant.
-	  this.#STATE[x+dx][y+dy] === 1) // check that neighbor is our piece.
-      {
-	stackCounter++;
-	x += dx;
-	y += dy;
-	this.#computeChainLength(x, y, stackCounter);
-      }
-      return 0; // We compute side-effects only!
-    });
-    return stackCounter;
+    console.log(this.#STATE[y+dy][x+dx] === 1);
+    if (stackCounter >= 5) return stackCounter; // this is a winning move.
+    if (this.#STATE[y+dy][x+dx] === 1) // check that neighbor is our piece.
+    {
+      return this.#computeLengthOnRay(x+dx, y+dy, [dx,dy], stackCounter);
+    }
+    return stackCounter; // exit stack
   }
 
   evalPosition() {
@@ -87,12 +89,14 @@ class Engine {
     // const newArray = this.#STATE.forEach((row, y) =>
     //   row.forEach((col,x) => console.log(`${x}, ${y} `, col)));
     // --- MORE READABLE ---
+    let dv = [-1,1];
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	evalMatrix[x][y] = this.#computeChainLength(x,y);
+	// evalMatrix[x][y] = this.#computeLengthOnRay(x,y,dv);
       }
     }
+    evalMatrix[5][12] = this.#computeLengthOnRay(12,5,dv);
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
     console.table(evalMatrix, tableColumns);
   }
