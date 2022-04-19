@@ -50,6 +50,36 @@ class Engine {
     return newArray;
   }
 
+  // UTILITY FUNCTION
+  #isLegal(x,y) {
+
+    // Handling board edges
+    if(x < 0) return false;
+    if (y < 0) return false;
+    if (y >= this.#DIMS) return false;
+    if (x >= this.#DIMS) return false;
+
+    // Discounting occupied squares
+    if (Math.abs(this.#STATE[x][y]) === 1) return false;
+    return true;
+  }
+
+  #computeChainLength(x,y) {
+    let optimalLength = 0;
+    this.#VECS.forEach(v => {
+      const [dx,dy] = v;
+      if (this.#isLegal(x+dx, y+dy) &&
+	  this.#STATE[x+dx][y+dy] === 1)
+      {
+	optimalLength++;
+	return 1;
+      }
+      optimalLength = 0;
+      return 0;
+    });
+    return optimalLength;
+  }
+
   evalPosition() {
     // You can see how we would do this with a very ugly chaining of higher
     // order functions, but I think it obscures what is happening, so I will
@@ -64,6 +94,8 @@ class Engine {
 	evalMatrix[x][y] = this.#computeChainLength(x,y);
       }
     }
+    const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+    console.table(evalMatrix, tableColumns);
   }
 
   // Just for my sanity, not necessary
