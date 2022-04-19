@@ -50,17 +50,13 @@ class Engine {
     return newArray;
   }
 
-  // UTILITY FUNCTION
-  #isLegal(x,y) {
-
+  // UTILITY METHOD
+  #isBounded(x,y) {
     // Handling board edges
     if(x < 0) return false;
     if (y < 0) return false;
     if (y >= this.#DIMS) return false;
     if (x >= this.#DIMS) return false;
-
-    // Discounting occupied squares
-    if (Math.abs(this.#STATE[x][y]) === 1) return false;
     return true;
   }
 
@@ -68,13 +64,12 @@ class Engine {
     let optimalLength = 0;
     this.#VECS.forEach(v => {
       const [dx,dy] = v;
-      if (this.#isLegal(x+dx, y+dy) &&
+      if (this.#isBounded(x+dx, y+dy) &&
+	  this.#STATE[x][y] === 0 &&
 	  this.#STATE[x+dx][y+dy] === 1)
       {
 	optimalLength++;
-	return 1;
       }
-      optimalLength = 0;
       return 0;
     });
     return optimalLength;
