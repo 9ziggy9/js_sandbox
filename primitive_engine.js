@@ -60,6 +60,10 @@ class Engine {
     return true;
   }
 
+  #isVacant(x,y) {
+    return this.#isBounded(x,y) && this.#STATE[y][x] === 0;
+  }
+
   // The following algorithm uses recursion to count the number of pieces which
   // reside along a ray in a given direction.
   // x, y coordinates are provided in natural way. We refer to the displacement
@@ -88,7 +92,8 @@ class Engine {
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	evalMatrix[y][x] = this.#computeLengthOnRay(x,y,dv);
+	if (this.#isVacant(x,y))
+	  evalMatrix[y][x] = this.#computeLengthOnRay(x,y,dv);
       }
     }
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
