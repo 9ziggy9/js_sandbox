@@ -54,8 +54,8 @@ const PortfolioGraph = () => {
 	}
 	priceHistories.push(history.prices.map(p => quantity * p[1]));
       }
+      setPortfolio([timeline, foldData(priceHistories)]);
     }
-    setPortfolio([timeline, foldData(priceHistories)]);
   };
 
   useEffect(() => {
