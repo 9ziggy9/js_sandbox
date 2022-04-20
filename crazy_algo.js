@@ -12,5 +12,20 @@ function foldData(matrix) {
   return result.map((a,u) => matrixTranspose[u].reduce((a, v) => a + v));
 }
 
+function modularFoldData(matrix) {
+  // first we flatten the matrix into 1 dimension.
+  const matrixFlat = matrix.reduce((F,M_y) => F = [...F, ...M_y], []);
+  // we are interested in the size of subarrays, assuming they are
+  // the same length we have.
+  const s = matrix[0].length;
+  let result = new Array(s).fill(0);
+  // modulo operator makes us sum into result "buckets" around a ring.
+  matrixFlat.forEach((x, i) => result[i % s] += x);
+  return result;
+}
+
 const foldedData = foldData(data);
 console.log(foldedData);
+
+const modularFoldedData = modularFoldData(data);
+console.log(modularFoldedData);
