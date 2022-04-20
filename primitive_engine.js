@@ -90,14 +90,14 @@ class Engine {
     let evalMatrix = this.#init2DArray();
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	let tmp, optimalLength = 0;
-	if (this.#isVacant(x,y)) {
-	  this.#VECS.forEach(dv => {
-	    tmp = this.#computeLengthOnRay(x,y,dv);
-	    if (tmp > optimalLength) optimalLength = tmp;
-	  });
-	  evalMatrix[y][x] = optimalLength;
-	}
+        let tmp, optimalLength = 0;
+        if (this.#isVacant(x,y)) {
+          this.#VECS.forEach(dv => {
+            tmp = this.#computeLengthOnRay(x,y,dv);
+            if (tmp > optimalLength) optimalLength = tmp;
+          });
+          evalMatrix[y][x] = optimalLength;
+        }
       }
     }
     const tableColumns = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
@@ -112,10 +112,10 @@ class Engine {
     let max = 0;
     for (let y = 0; y < this.#DIMS; y++) {
       for (let x = 0; x < this.#DIMS; x++) {
-	if (arr[y][x] > max) {
-	  max = arr[y][x];
-	  coords = [x,y];
-	}
+        if (arr[y][x] > max) {
+          max = arr[y][x];
+          coords = [x,y];
+        }
       }
     }
     return coords;
@@ -130,8 +130,8 @@ class Engine {
       // more cases in the future, default fallthrough for now.
       default:
       case "naive": {
-	evaluation = this.naiveEval();
-	break;
+        evaluation = this.naiveEval();
+        break;
       }
     }
     return this.#selectBest(evaluation);
