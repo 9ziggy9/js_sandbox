@@ -14,19 +14,19 @@ function foldData(matrix) {
 
 // Parameters to pass to Plot component.
 const dataSet = (d) => [{x:d[0], y:d[1],
-			  type:'scatter', mode:'lines',
-			  marker: {color: 'orangered'}}];
+                          type:'scatter', mode:'lines',
+                          marker: {color: 'orangered'}}];
 const customLayout = {
   showlegend: false, margin: {b: 0, r: 30, l: 30, t: 0}, autosize: true,
   modebar: {
     remove: ["autoScale2d", "autoscale", "editInChartStudio",
-	      "editinchartstudio", "hoverCompareCartesian", "hovercompare",
-	      "lasso", "lasso2d", "orbitRotation", "orbitrotation", "pan",
-	      "pan2d", "pan3d", "reset", "resetCameraDefault3d",
-	      "resetCameraLastSave3d", "resetGeo", "resetSankeyGroup",
-	      "resetScale2d", "resetViewMapbox", "resetViews",
-	      "resetcameradefault", "resetcameralastsave", "resetsankeygroup",
-	      "resetscale", "resetview", "resetviews", "select", "select2d",
+              "editinchartstudio", "hoverCompareCartesian", "hovercompare",
+              "lasso", "lasso2d", "orbitRotation", "orbitrotation", "pan",
+              "pan2d", "pan3d", "reset", "resetCameraDefault3d",
+              "resetCameraLastSave3d", "resetGeo", "resetSankeyGroup",
+              "resetScale2d", "resetViewMapbox", "resetViews",
+              "resetcameradefault", "resetcameralastsave", "resetsankeygroup",
+              "resetscale", "resetview", "resetviews", "select", "select2d",
 	      "sendDataToCloud", "senddatatocloud", "tableRotation",
 	      "tablerotation", "toImage", "toggleHover", "toggleSpikelines",
 	      "togglehover", "togglespikelines", "toimage", "zoom", "zoom2d",
