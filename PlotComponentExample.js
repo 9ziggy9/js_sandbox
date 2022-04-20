@@ -27,11 +27,11 @@ const customLayout = {
               "resetScale2d", "resetViewMapbox", "resetViews",
               "resetcameradefault", "resetcameralastsave", "resetsankeygroup",
               "resetscale", "resetview", "resetviews", "select", "select2d",
-	      "sendDataToCloud", "senddatatocloud", "tableRotation",
-	      "tablerotation", "toImage", "toggleHover", "toggleSpikelines",
-	      "togglehover", "togglespikelines", "toimage", "zoom", "zoom2d",
-	      "zoom3d", "zoomIn2d", "zoomInGeo", "zoomInMapbox", "zoomOut2d",
-	      "zoomOutGeo", "zoomOutMapbox", "zoomin", "zoomout"]
+              "sendDataToCloud", "senddatatocloud", "tableRotation",
+              "tablerotation", "toImage", "toggleHover", "toggleSpikelines",
+              "togglehover", "togglespikelines", "toimage", "zoom", "zoom2d",
+              "zoom3d", "zoomIn2d", "zoomInGeo", "zoomInMapbox", "zoomOut2d",
+              "zoomOutGeo", "zoomOutMapbox", "zoomin", "zoomout"]
   },
   grid: {columns: 1, rows: 1}, xaxis: {showgrid: false}, yaxis: {showgrid: false}
 };
@@ -47,12 +47,12 @@ const PortfolioGraph = () => {
     const aMonthAgo = (today - 2678400) - 3600;
     if (s.length > 0) {
       for (let {crypto_id: name, quantity} of Object.values(s)) {
-	let res = await fetch(`https://api.coingecko.com/api/v3/coins/${name}/market_chart/range?vs_currency=usd&from=${aMonthAgo}&to=${today}`);
-	const history = await res.json();
-	if (priceHistories.length === 0) { // Construct time axis once.
-	  timeline.push(...history.prices.map(p => p[0]));
-	}
-	priceHistories.push(history.prices.map(p => quantity * p[1]));
+        let res = await fetch(`https://api.coingecko.com/api/v3/coins/${name}/market_chart/range?vs_currency=usd&from=${aMonthAgo}&to=${today}`);
+        const history = await res.json();
+        if (priceHistories.length === 0) { // Construct time axis once.
+          timeline.push(...history.prices.map(p => p[0]));
+        }
+        priceHistories.push(history.prices.map(p => quantity * p[1]));
       }
       setPortfolio([timeline, foldData(priceHistories)]);
     }
@@ -65,11 +65,11 @@ const PortfolioGraph = () => {
     return (
       <div>
         <Plot
-	  data={dataSet(portfolio)}
-	  layout={customLayout}
-	  useResizeHandler={true}
-	  style={{ width: "100%", height: "100%"}}
-	/>
+          data={dataSet(portfolio)}
+          layout={customLayout}
+          useResizeHandler={true}
+          style={{ width: "100%", height: "100%"}}
+        />
       </div>
     );
 };
