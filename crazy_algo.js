@@ -1,7 +1,13 @@
 const arr1 = [2,4,5,6,7,8];
 const arr2 = [1,0,6,1,2,5];
 const arr3 = [9,8,7,4,5,2];
+
+const bigArr1 = new Array(10000).fill(1);
+const bigArr2 = new Array(10000).fill(2);
+const bigArr3 = new Array(10000).fill(3);
+
 const data = [arr1,arr2,arr3];
+const bigData = [bigArr1, bigArr2, bigArr3]
 
 function foldData(matrix) {
   // we need to reduce over VERTICAL indices, in order to do this conveniently,
@@ -24,8 +30,12 @@ function modularFoldData(matrix) {
   return result;
 }
 
-const foldedData = foldData(data);
-console.log(foldedData);
+function timeAlgo(algo, arg) {
+  const start = window.performance.now();
+  algo(arg);
+  const stop = window.performance.now();
+  console.log("Time taken to execute = ", (stop - start)/1000);
+}
 
-const modularFoldedData = modularFoldData(data);
-console.log(modularFoldedData);
+timeAlgo(foldData, bigData);
+timeAlgo(modularFoldData, bigData);
